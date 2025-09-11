@@ -651,6 +651,7 @@
         let quizQuestions = [];
         let studyStartTime = Date.now();
         let currentNumberRange = { start: 1, end: 20 };
+        let soundEnabled = true;
 
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
         const numbers = Array.from({length: 100}, (_, i) => i + 1);
@@ -670,31 +671,28 @@
 
         // --- SES SİSTEMİ: MP3 Dosyaları ---
         function playSound(fileName, callback) {
-            console.log('Ses çalınıyor:', fileName);
-            const indicator = document.getElementById('soundIndicator');
-            
-            // Ses dosyasının projedeki yolunu belirliyoruz
-            const audio = new Audio(`./sounds/${fileName}`);
-            
+            if (!soundEnabled) {
+                if (callback) callback();
+                return;
+            }
+            const audio = new Audio();
+            audio.src = `https://archive.org/download/ingilizce-sesler-projesi/${fileName}`;
+            const indicator = document.getElementById('soundIndicator' );
             indicator.style.display = 'block';
-
             audio.onended = () => {
-                console.log('Ses çalma tamamlandı.');
                 indicator.style.display = 'none';
                 if (callback) callback();
             };
-
             audio.onerror = (e) => {
-                console.error('Ses çalma sırasında hata:', e);
                 indicator.style.display = 'none';
-                alert("Ses dosyası bulunamadı. Lütfen 'sounds' klasörünün içinde doğru dosyanın olduğundan emin olun.");
+                console.error('Ses yüklenirken hata oluştu:', e);
                 if (callback) callback();
             };
-
-            audio.play().catch(error => {
-                console.error('Ses çalma hatası (otomatik oynatma engellendi):', error);
-                indicator.style.display = 'none';
-            });
+            audio.play().catch(e => console.error("Ses çalma hatası:", e));
+        }
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundIcon').className = soundEnabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
         }
 
         function showSection(sectionName) {
