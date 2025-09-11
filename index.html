@@ -546,7 +546,6 @@
             <button class="nav-btn" onclick="showSection('stats')">📊 İstatistikler</button>
         </div>
 
-        <!-- Ana Sayfa -->
         <div id="welcome" class="content-section active">
             <div class="welcome-section">
                 <h2>Hoş Geldin! 👋</h2>
@@ -572,13 +571,11 @@
             </div>
         </div>
 
-        <!-- Harfler Bölümü -->
         <div id="letters" class="content-section">
             <h2 style="text-align: center; color: #4A90E2; margin-bottom: 30px;">🔤 İngilizce Harfler</h2>
             <div class="cards-grid" id="lettersGrid"></div>
         </div>
 
-        <!-- Sayılar Bölümü -->
         <div id="numbers" class="content-section">
             <h2 style="text-align: center; color: #FF6B9D; margin-bottom: 30px;">🔢 İngilizce Sayılar (1-100)</h2>
             
@@ -594,7 +591,6 @@
             <div class="numbers-grid" id="numbersGrid"></div>
         </div>
 
-        <!-- Quiz Bölümü -->
         <div id="quiz" class="content-section">
             <div class="quiz-section">
                 <h2 style="color: #4A90E2; margin-bottom: 30px;">🎯 Premium Quiz</h2>
@@ -613,7 +609,6 @@
             </div>
         </div>
 
-        <!-- İstatistikler Bölümü -->
         <div id="stats" class="content-section">
             <div class="stats-panel">
                 <h2 style="color: #4A90E2; margin-bottom: 20px;">📊 Öğrenme İstatistiklerin</h2>
@@ -647,7 +642,6 @@
     <script>
         console.log('Premium İngilizce Öğrenme Uygulaması başlatılıyor...');
         
-        // Uygulama durumu
         let currentSection = 'welcome';
         let learnedLetters = new Set();
         let learnedNumbers = new Set();
@@ -658,11 +652,9 @@
         let studyStartTime = Date.now();
         let currentNumberRange = { start: 1, end: 20 };
 
-        // Harfler ve sayılar verisi
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
         const numbers = Array.from({length: 100}, (_, i) => i + 1);
         
-        // Sayı isimleri (1-100)
         const numberWords = [
             'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
             'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen', 'Twenty',
@@ -676,117 +668,55 @@
             'Ninety-one', 'Ninety-two', 'Ninety-three', 'Ninety-four', 'Ninety-five', 'Ninety-six', 'Ninety-seven', 'Ninety-eight', 'Ninety-nine', 'One hundred'
         ];
 
-        // --- ANDROID UYUMLU SES SİSTEMİ ---
-        let voices = [];
-        let isSpeechReady = false;
-
-        // Ses motoru hazır olduğunda sesleri yükle
-        function loadVoices() {
-            voices = speechSynthesis.getVoices().filter(voice => voice.lang.startsWith('en'));
-            if (voices.length > 0) {
-                console.log('İngilizce sesler yüklendi:', voices.length);
-                isSpeechReady = true;
-            }
-        }
-
-        // Sayfa ilk yüklendiğinde ve sesler değiştiğinde bu fonksiyonu çağır
-        if ('speechSynthesis' in window) {
-            speechSynthesis.onvoiceschanged = loadVoices;
-            loadVoices();
-        }
-
-        // Android uyumlu ses çalma fonksiyonu
-        function playSound(text, callback) {
-            console.log('Ses çalınıyor:', text);
-
-            if (!('speechSynthesis' in window)) {
-                console.log('Web Speech API desteklenmiyor.');
-                if (callback) callback();
-                return;
-            }
-
-            // Ses motoru hazır değilse bekle
-            if (!isSpeechReady) {
-                console.log('Ses motoru henüz hazır değil, bekleniyor...');
-                setTimeout(() => playSound(text, callback), 250);
-                return;
-            }
-
+        // --- SES SİSTEMİ: MP3 Dosyaları ---
+        function playSound(fileName, callback) {
+            console.log('Ses çalınıyor:', fileName);
             const indicator = document.getElementById('soundIndicator');
+            
+            // Ses dosyasının projedeki yolunu belirliyoruz
+            const audio = new Audio(`./sounds/${fileName}`);
+            
             indicator.style.display = 'block';
 
-            // Önceki konuşmaları durdur
-            speechSynthesis.cancel();
+            audio.onended = () => {
+                console.log('Ses çalma tamamlandı.');
+                indicator.style.display = 'none';
+                if (callback) callback();
+            };
 
-            // Android için stabilite gecikmesi
-            setTimeout(() => {
-                try {
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.lang = 'en-US';
-                    utterance.rate = 0.8;
-                    utterance.pitch = 1.1;
-                    utterance.volume = 1.0;
+            audio.onerror = (e) => {
+                console.error('Ses çalma sırasında hata:', e);
+                indicator.style.display = 'none';
+                alert("Ses dosyası bulunamadı. Lütfen 'sounds' klasörünün içinde doğru dosyanın olduğundan emin olun.");
+                if (callback) callback();
+            };
 
-                    // Android için güvenilir ses seçimi
-                    let selectedVoice = voices.find(voice => voice.name === 'Google US English') ||
-                                        voices.find(voice => voice.lang === 'en-US' && voice.localService) ||
-                                        voices.find(voice => voice.lang === 'en-US');
-                    
-                    if (selectedVoice) {
-                        utterance.voice = selectedVoice;
-                        console.log('Kullanılan ses:', selectedVoice.name);
-                    } else {
-                        console.log('Uygun bir en-US sesi bulunamadı, varsayılan kullanılıyor.');
-                    }
-
-                    utterance.onend = () => {
-                        console.log('Ses çalma tamamlandı.');
-                        indicator.style.display = 'none';
-                        if (callback) callback();
-                    };
-
-                    utterance.onerror = (event) => {
-                        console.error('SpeechSynthesis Hatası:', event.error);
-                        indicator.style.display = 'none';
-                        if (callback) callback();
-                    };
-
-                    speechSynthesis.speak(utterance);
-
-                } catch (error) {
-                    console.error('Ses çalma sırasında hata:', error);
-                    indicator.style.display = 'none';
-                    if (callback) callback();
-                }
-            }, 100);
+            audio.play().catch(error => {
+                console.error('Ses çalma hatası (otomatik oynatma engellendi):', error);
+                indicator.style.display = 'none';
+            });
         }
 
-        // Bölüm değiştirme fonksiyonu
         function showSection(sectionName) {
             console.log('Bölüm değiştiriliyor:', sectionName);
             
-            // Tüm bölümleri gizle
             document.querySelectorAll('.content-section').forEach(section => {
                 section.classList.remove('active');
             });
             
-            // Tüm butonları pasif yap
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             
-            // Seçilen bölümü göster
             const targetSection = document.getElementById(sectionName);
             if (targetSection) {
                 targetSection.classList.add('active');
             }
             
-            // Seçilen butonu aktif yap
             event.target.classList.add('active');
             
             currentSection = sectionName;
             
-            // Bölüme göre içerik yükle
             if (sectionName === 'letters') {
                 loadLetters();
             } else if (sectionName === 'numbers') {
@@ -800,7 +730,6 @@
             updateProgress();
         }
 
-        // Harfleri yükle
         function loadLetters() {
             const grid = document.getElementById('lettersGrid');
             grid.innerHTML = '';
@@ -817,7 +746,6 @@
             });
         }
 
-        // Sayıları yükle
         function loadNumbers() {
             const grid = document.getElementById('numbersGrid');
             grid.innerHTML = '';
@@ -836,28 +764,23 @@
             }
         }
 
-        // Sayı aralığını değiştir
         function showNumberRange(start, end, button) {
-            // Tüm range butonlarını pasif yap
             document.querySelectorAll('.range-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             
-            // Seçilen butonu aktif yap
             button.classList.add('active');
             
             currentNumberRange = { start, end };
             loadNumbers();
         }
 
-        // Harf sesini çal
         function playLetter(letter) {
-            playSound(letter, () => {
+            playSound(`${letter.toLowerCase()}.mp3`, () => {
                 learnedLetters.add(letter);
                 updateProgress();
                 saveProgress();
                 
-                // Kartı güncelle
                 const cards = document.querySelectorAll('.learning-card');
                 cards.forEach(card => {
                     if (card.querySelector('.card-letter')?.textContent === letter) {
@@ -868,15 +791,13 @@
             });
         }
 
-        // Sayı sesini çal
         function playNumber(number) {
-            const word = numberWords[number - 1];
-            playSound(word, () => {
+            const fileName = `en_num_${String(number).padStart(2, '0')}.mp3`;
+            playSound(fileName, () => {
                 learnedNumbers.add(number);
                 updateProgress();
                 saveProgress();
                 
-                // Kartı güncelle
                 const cards = document.querySelectorAll('.learning-card');
                 cards.forEach(card => {
                     if (card.querySelector('.card-number')?.textContent == number) {
@@ -887,7 +808,6 @@
             });
         }
 
-        // İlerlemeyi güncelle
         function updateProgress() {
             const totalItems = letters.length + numbers.length;
             const learnedItems = learnedLetters.size + learnedNumbers.size;
@@ -904,39 +824,32 @@
                 progressText.textContent = `${learnedItems}/${totalItems} öğrenildi (${Math.round(progressPercentage)}%)`;
             }
             
-            // Rozetleri güncelle
             updateBadges();
         }
 
-        // Rozetleri güncelle
         function updateBadges() {
             const letterBadge = document.getElementById('letterBadge');
             const numberBadge = document.getElementById('numberBadge');
             const quizBadge = document.getElementById('quizBadge');
             const masterBadge = document.getElementById('masterBadge');
             
-            // Harf rozeti
             if (learnedLetters.size >= 26) {
                 letterBadge.style.opacity = '1';
             }
             
-            // Sayı rozeti
             if (learnedNumbers.size >= 100) {
                 numberBadge.style.opacity = '1';
             }
             
-            // Quiz rozeti
             if (totalQuizScore >= 100) {
                 quizBadge.style.opacity = '1';
             }
             
-            // Master rozeti
             if (learnedLetters.size >= 26 && learnedNumbers.size >= 100 && totalQuizScore >= 100) {
                 masterBadge.style.opacity = '1';
             }
         }
 
-        // Kutlama animasyonu
         function showCelebration(emoji) {
             const celebration = document.createElement('div');
             celebration.className = 'celebration';
@@ -948,7 +861,6 @@
             }, 2000);
         }
 
-        // Quiz başlat
         function initQuiz() {
             currentQuizQuestion = 0;
             quizScore = 0;
@@ -960,11 +872,9 @@
             showQuestion();
         }
 
-        // Quiz soruları oluştur
         function generateQuizQuestions() {
             const questions = [];
             
-            // Harf soruları
             for (let i = 0; i < 5; i++) {
                 const correctLetter = letters[Math.floor(Math.random() * letters.length)];
                 const wrongOptions = [];
@@ -983,11 +893,10 @@
                     question: `Hangi harf "${correctLetter}" harfidir?`,
                     options: options,
                     correct: correctLetter,
-                    audio: correctLetter
+                    audio: `${correctLetter.toLowerCase()}.mp3`
                 });
             }
             
-            // Sayı soruları
             for (let i = 0; i < 5; i++) {
                 const correctNumber = Math.floor(Math.random() * 20) + 1;
                 const wrongOptions = [];
@@ -1006,14 +915,13 @@
                     question: `Hangi sayı "${numberWords[correctNumber-1]}" kelimesini temsil eder?`,
                     options: options,
                     correct: correctNumber,
-                    audio: numberWords[correctNumber-1]
+                    audio: `en_num_${String(correctNumber).padStart(2, '0')}.mp3`
                 });
             }
             
             return questions.sort(() => Math.random() - 0.5);
         }
 
-        // Soruyu göster
         function showQuestion() {
             if (currentQuizQuestion >= quizQuestions.length) {
                 showQuizResults();
@@ -1026,7 +934,6 @@
             const optionsContainer = document.getElementById('quizOptions');
             optionsContainer.innerHTML = '';
             
-            // Ses çal
             playSound(question.audio);
             
             question.options.forEach(option => {
@@ -1040,11 +947,10 @@
             document.getElementById('nextBtn').style.display = 'none';
         }
 
-        // Cevap seç
         function selectAnswer(selected, correct) {
             const options = document.querySelectorAll('.quiz-option');
             options.forEach(option => {
-                option.onclick = null; // Tıklamayı devre dışı bırak
+                option.onclick = null;
                 
                 if (option.textContent == correct) {
                     option.classList.add('correct');
@@ -1056,21 +962,19 @@
             if (selected == correct) {
                 quizScore += 10;
                 showCelebration('🎉');
-                playSound('Correct!');
+                // playSound('Correct!.mp3'); // Ses dosyası eklemeniz gerekir
             } else {
-                playSound('Try again!');
+                // playSound('Try again!.mp3'); // Ses dosyası eklemeniz gerekir
             }
             
             document.getElementById('nextBtn').style.display = 'block';
         }
 
-        // Sonraki soru
         function nextQuestion() {
             currentQuizQuestion++;
             showQuestion();
         }
 
-        // Quiz sonuçlarını göster
         function showQuizResults() {
             totalQuizScore += quizScore;
             
@@ -1080,18 +984,16 @@
             const scoreText = `${quizScore}/100 puan aldın! 🎊`;
             document.getElementById('finalScore').textContent = scoreText;
             
-            playSound(`Great job! You scored ${quizScore} points!`);
+            // playSound(`Great job! You scored ${quizScore} points!.mp3`); // Ses dosyası eklemeniz gerekir
             
             updateProgress();
             saveProgress();
         }
 
-        // Quiz'i yeniden başlat
         function restartQuiz() {
             initQuiz();
         }
 
-        // İstatistikleri güncelle
         function updateStats() {
             document.getElementById('learnedLettersCount').textContent = learnedLetters.size;
             document.getElementById('learnedNumbersCount').textContent = learnedNumbers.size;
@@ -1100,7 +1002,6 @@
             const studyMinutes = Math.floor((Date.now() - studyStartTime) / 60000);
             document.getElementById('studyTime').textContent = studyMinutes;
             
-            // Başarıları göster
             const achievementsList = document.getElementById('achievementsList');
             const achievements = [];
             
@@ -1114,7 +1015,6 @@
                 : '<p>Henüz başarı kazanmadın. Öğrenmeye devam et! 💪</p>';
         }
 
-        // İlerlemeyi kaydet
         function saveProgress() {
             const progress = {
                 learnedLetters: Array.from(learnedLetters),
@@ -1126,7 +1026,6 @@
             localStorage.setItem('englishLearningProgress', JSON.stringify(progress));
         }
 
-        // İlerlemeyi yükle
         function loadProgress() {
             const saved = localStorage.getItem('englishLearningProgress');
             if (saved) {
@@ -1138,7 +1037,6 @@
             }
         }
 
-        // Sayfa yüklendiğinde
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Sayfa yüklendi, uygulama başlatılıyor...');
             
@@ -1146,13 +1044,10 @@
             loadLetters();
             updateProgress();
             
-            // Hoş geldin mesajı - API'nin kullanıcı etkileşimiyle aktifleşmesi için
-            setTimeout(() => {
-                playSound('Welcome to Premium English Learning!');
-            }, 1000);
+            // Hoş geldin sesi için
+            playSound('welcome.mp3');
         });
 
-        // Sayfa kapatılırken ilerlemeyi kaydet
         window.addEventListener('beforeunload', saveProgress);
     </script>
 </body>
