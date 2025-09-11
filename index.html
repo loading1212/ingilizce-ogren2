@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İngilizce Öğreniyorum - Premium Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #4A90E2, #FF6B9D, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        .premium-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #FF6B9D, #FF8C42);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
+            position: relative;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+        }
+
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #4A90E2, #667eea);
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .numbers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .learning-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid transparent;
+            touch-action: manipulation;
+        }
+
+        .learning-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border-color: #FF6B9D;
+        }
+
+        .learning-card:active {
+            transform: scale(0.95);
+        }
+
+        .learning-card.learned {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            border-color: #4CAF50;
+        }
+
+        .card-letter {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #4A90E2;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #FF6B9D;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-word {
+            font-size: 1rem;
+            color: #666;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .play-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            touch-action: manipulation;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .progress-section {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .achievement-badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .welcome-section {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .welcome-section h2 {
+            font-size: 2.5rem;
+            color: #4A90E2;
+            margin-bottom: 20px;
+        }
+
+        .welcome-section p {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .start-learning-btn {
+            background: linear-gradient(45deg, #FF6B9D, #FF8C42);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.3);
+            touch-action: manipulation;
+        }
+
+        .start-learning-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(255, 107, 157, 0.4);
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-star {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 2rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .quiz-section {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .quiz-question {
+            font-size: 1.8rem;
+            color: #4A90E2;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .quiz-option {
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            font-weight: bold;
+            touch-action: manipulation;
+        }
+
+        .quiz-option:hover {
+            border-color: #4A90E2;
+            transform: scale(1.05);
+        }
+
+        .quiz-option.correct {
+            border-color: #4CAF50;
+            background: #e8f5e8;
+        }
+
+        .quiz-option.wrong {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        .number-range-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .range-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            touch-action: manipulation;
+        }
+
+        .range-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .range-btn.active {
+            background: linear-gradient(45deg, #FF6B9D, #FF8C42);
+        }
+
+        .stats-panel {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4A90E2;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 15px;
+            }
+            
+            .numbers-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 10px;
+            }
+            
+            .learning-card {
+                padding: 15px;
+            }
+            
+            .card-letter {
+                font-size: 2.5rem;
+            }
+            
+            .card-number {
+                font-size: 2rem;
+            }
+            
+            .nav-buttons {
+                gap: 10px;
+            }
+            
+            .nav-btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(0) rotate(0deg); opacity: 1; }
+            50% { transform: scale(1) rotate(180deg); opacity: 1; }
+            100% { transform: scale(0) rotate(360deg); opacity: 0; }
+        }
+
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            z-index: 1000;
+            animation: celebration 2s ease-out forwards;
+        }
+
+        @keyframes celebration {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+
+        .sound-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 1rem;
+            z-index: 1000;
+            display: none;
+            animation: pulse 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-star" style="top: 10%; left: 10%; animation-delay: 0s;">⭐</div>
+        <div class="floating-star" style="top: 20%; right: 15%; animation-delay: 1s;">🌟</div>
+        <div class="floating-star" style="top: 60%; left: 5%; animation-delay: 2s;">✨</div>
+        <div class="floating-star" style="top: 70%; right: 10%; animation-delay: 3s;">⭐</div>
+        <div class="floating-star" style="top: 30%; left: 80%; animation-delay: 4s;">🌟</div>
+    </div>
+
+    <div class="sound-indicator" id="soundIndicator">🔊 Ses Çalıyor...</div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🎓 İngilizce Öğreniyorum <span class="premium-badge">PREMIUM</span></h1>
+            <p>5-7 yaş çocuklar için gelişmiş İngilizce öğrenme uygulaması</p>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="showSection('welcome')">🏠 Ana Sayfa</button>
+            <button class="nav-btn" onclick="showSection('letters')">🔤 Harfler</button>
+            <button class="nav-btn" onclick="showSection('numbers')">🔢 Sayılar (1-100)</button>
+            <button class="nav-btn" onclick="showSection('quiz')">🎯 Quiz</button>
+            <button class="nav-btn" onclick="showSection('stats')">📊 İstatistikler</button>
+        </div>
+
+        <!-- Ana Sayfa -->
+        <div id="welcome" class="content-section active">
+            <div class="welcome-section">
+                <h2>Hoş Geldin! 👋</h2>
+                <p>Premium İngilizce öğrenme deneyimine hazır mısın? 1'den 100'e kadar sayıları ve tüm harfleri öğrenerek eğlenceli bir yolculuğa çıkacağız!</p>
+                <button class="start-learning-btn" onclick="showSection('letters')">
+                    Premium Öğrenmeye Başla! 🚀
+                </button>
+            </div>
+            
+            <div class="progress-section">
+                <h3>İlerleme Durumun</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="overallProgress"></div>
+                </div>
+                <p id="progressText">Premium öğrenme yolculuğuna başla! 🌟</p>
+                
+                <div class="achievement-badges">
+                    <div class="badge" id="letterBadge" style="opacity: 0.3;" title="Harf Ustası">📝</div>
+                    <div class="badge" id="numberBadge" style="opacity: 0.3;" title="Sayı Uzmanı">🔢</div>
+                    <div class="badge" id="quizBadge" style="opacity: 0.3;" title="Quiz Şampiyonu">🏆</div>
+                    <div class="badge" id="masterBadge" style="opacity: 0.3;" title="İngilizce Ustası">👑</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Harfler Bölümü -->
+        <div id="letters" class="content-section">
+            <h2 style="text-align: center; color: #4A90E2; margin-bottom: 30px;">🔤 İngilizce Harfler</h2>
+            <div class="cards-grid" id="lettersGrid"></div>
+        </div>
+
+        <!-- Sayılar Bölümü -->
+        <div id="numbers" class="content-section">
+            <h2 style="text-align: center; color: #FF6B9D; margin-bottom: 30px;">🔢 İngilizce Sayılar (1-100)</h2>
+            
+            <div class="number-range-selector">
+                <button class="range-btn active" onclick="showNumberRange(1, 20, this)">1-20</button>
+                <button class="range-btn" onclick="showNumberRange(21, 40, this)">21-40</button>
+                <button class="range-btn" onclick="showNumberRange(41, 60, this)">41-60</button>
+                <button class="range-btn" onclick="showNumberRange(61, 80, this)">61-80</button>
+                <button class="range-btn" onclick="showNumberRange(81, 100, this)">81-100</button>
+                <button class="range-btn" onclick="showNumberRange(1, 100, this)">Tümü</button>
+            </div>
+            
+            <div class="numbers-grid" id="numbersGrid"></div>
+        </div>
+
+        <!-- Quiz Bölümü -->
+        <div id="quiz" class="content-section">
+            <div class="quiz-section">
+                <h2 style="color: #4A90E2; margin-bottom: 30px;">🎯 Premium Quiz</h2>
+                <div id="quizContent">
+                    <div class="quiz-question" id="quizQuestion">Hangi harf 'A' harfidir?</div>
+                    <div class="quiz-options" id="quizOptions"></div>
+                    <button class="start-learning-btn" onclick="nextQuestion()" id="nextBtn" style="display: none;">
+                        Sonraki Soru ➡️
+                    </button>
+                </div>
+                <div id="quizResults" style="display: none;">
+                    <h3>🎉 Tebrikler!</h3>
+                    <p id="finalScore"></p>
+                    <button class="start-learning-btn" onclick="restartQuiz()">Tekrar Oyna 🔄</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- İstatistikler Bölümü -->
+        <div id="stats" class="content-section">
+            <div class="stats-panel">
+                <h2 style="color: #4A90E2; margin-bottom: 20px;">📊 Öğrenme İstatistiklerin</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" id="learnedLettersCount">0</div>
+                        <div class="stat-label">Öğrenilen Harf</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="learnedNumbersCount">0</div>
+                        <div class="stat-label">Öğrenilen Sayı</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalQuizScore">0</div>
+                        <div class="stat-label">Quiz Puanı</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="studyTime">0</div>
+                        <div class="stat-label">Çalışma Dakikası</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h3>🏆 Başarılarım</h3>
+                    <div id="achievementsList" style="margin-top: 15px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('Premium İngilizce Öğrenme Uygulaması başlatılıyor...');
+        
+        // Uygulama durumu
+        let currentSection = 'welcome';
+        let learnedLetters = new Set();
+        let learnedNumbers = new Set();
+        let quizScore = 0;
+        let totalQuizScore = 0;
+        let currentQuizQuestion = 0;
+        let quizQuestions = [];
+        let studyStartTime = Date.now();
+        let currentNumberRange = { start: 1, end: 20 };
+
+        // Harfler ve sayılar verisi
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        const numbers = Array.from({length: 100}, (_, i) => i + 1);
+        
+        // Sayı isimleri (1-100)
+        const numberWords = [
+            'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+            'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen', 'Twenty',
+            'Twenty-one', 'Twenty-two', 'Twenty-three', 'Twenty-four', 'Twenty-five', 'Twenty-six', 'Twenty-seven', 'Twenty-eight', 'Twenty-nine', 'Thirty',
+            'Thirty-one', 'Thirty-two', 'Thirty-three', 'Thirty-four', 'Thirty-five', 'Thirty-six', 'Thirty-seven', 'Thirty-eight', 'Thirty-nine', 'Forty',
+            'Forty-one', 'Forty-two', 'Forty-three', 'Forty-four', 'Forty-five', 'Forty-six', 'Forty-seven', 'Forty-eight', 'Forty-nine', 'Fifty',
+            'Fifty-one', 'Fifty-two', 'Fifty-three', 'Fifty-four', 'Fifty-five', 'Fifty-six', 'Fifty-seven', 'Fifty-eight', 'Fifty-nine', 'Sixty',
+            'Sixty-one', 'Sixty-two', 'Sixty-three', 'Sixty-four', 'Sixty-five', 'Sixty-six', 'Sixty-seven', 'Sixty-eight', 'Sixty-nine', 'Seventy',
+            'Seventy-one', 'Seventy-two', 'Seventy-three', 'Seventy-four', 'Seventy-five', 'Seventy-six', 'Seventy-seven', 'Seventy-eight', 'Seventy-nine', 'Eighty',
+            'Eighty-one', 'Eighty-two', 'Eighty-three', 'Eighty-four', 'Eighty-five', 'Eighty-six', 'Eighty-seven', 'Eighty-eight', 'Eighty-nine', 'Ninety',
+            'Ninety-one', 'Ninety-two', 'Ninety-three', 'Ninety-four', 'Ninety-five', 'Ninety-six', 'Ninety-seven', 'Ninety-eight', 'Ninety-nine', 'One hundred'
+        ];
+
+        // --- ANDROID UYUMLU SES SİSTEMİ ---
+        let voices = [];
+        let isSpeechReady = false;
+
+        // Ses motoru hazır olduğunda sesleri yükle
+        function loadVoices() {
+            voices = speechSynthesis.getVoices().filter(voice => voice.lang.startsWith('en'));
+            if (voices.length > 0) {
+                console.log('İngilizce sesler yüklendi:', voices.length);
+                isSpeechReady = true;
+            }
+        }
+
+        // Sayfa ilk yüklendiğinde ve sesler değiştiğinde bu fonksiyonu çağır
+        if ('speechSynthesis' in window) {
+            speechSynthesis.onvoiceschanged = loadVoices;
+            loadVoices();
+        }
+
+        // Android uyumlu ses çalma fonksiyonu
+        function playSound(text, callback) {
+            console.log('Ses çalınıyor:', text);
+
+            if (!('speechSynthesis' in window)) {
+                console.log('Web Speech API desteklenmiyor.');
+                if (callback) callback();
+                return;
+            }
+
+            // Ses motoru hazır değilse bekle
+            if (!isSpeechReady) {
+                console.log('Ses motoru henüz hazır değil, bekleniyor...');
+                setTimeout(() => playSound(text, callback), 250);
+                return;
+            }
+
+            const indicator = document.getElementById('soundIndicator');
+            indicator.style.display = 'block';
+
+            // Önceki konuşmaları durdur
+            speechSynthesis.cancel();
+
+            // Android için stabilite gecikmesi
+            setTimeout(() => {
+                try {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    utterance.rate = 0.8;
+                    utterance.pitch = 1.1;
+                    utterance.volume = 1.0;
+
+                    // Android için güvenilir ses seçimi
+                    let selectedVoice = voices.find(voice => voice.name === 'Google US English') ||
+                                        voices.find(voice => voice.lang === 'en-US' && voice.localService) ||
+                                        voices.find(voice => voice.lang === 'en-US');
+                    
+                    if (selectedVoice) {
+                        utterance.voice = selectedVoice;
+                        console.log('Kullanılan ses:', selectedVoice.name);
+                    } else {
+                        console.log('Uygun bir en-US sesi bulunamadı, varsayılan kullanılıyor.');
+                    }
+
+                    utterance.onend = () => {
+                        console.log('Ses çalma tamamlandı.');
+                        indicator.style.display = 'none';
+                        if (callback) callback();
+                    };
+
+                    utterance.onerror = (event) => {
+                        console.error('SpeechSynthesis Hatası:', event.error);
+                        indicator.style.display = 'none';
+                        if (callback) callback();
+                    };
+
+                    speechSynthesis.speak(utterance);
+
+                } catch (error) {
+                    console.error('Ses çalma sırasında hata:', error);
+                    indicator.style.display = 'none';
+                    if (callback) callback();
+                }
+            }, 100);
+        }
+
+        // Bölüm değiştirme fonksiyonu
+        function showSection(sectionName) {
+            console.log('Bölüm değiştiriliyor:', sectionName);
+            
+            // Tüm bölümleri gizle
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Tüm butonları pasif yap
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Seçilen bölümü göster
+            const targetSection = document.getElementById(sectionName);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // Seçilen butonu aktif yap
+            event.target.classList.add('active');
+            
+            currentSection = sectionName;
+            
+            // Bölüme göre içerik yükle
+            if (sectionName === 'letters') {
+                loadLetters();
+            } else if (sectionName === 'numbers') {
+                loadNumbers();
+            } else if (sectionName === 'quiz') {
+                initQuiz();
+            } else if (sectionName === 'stats') {
+                updateStats();
+            }
+            
+            updateProgress();
+        }
+
+        // Harfleri yükle
+        function loadLetters() {
+            const grid = document.getElementById('lettersGrid');
+            grid.innerHTML = '';
+            
+            letters.forEach(letter => {
+                const card = document.createElement('div');
+                card.className = `learning-card ${learnedLetters.has(letter) ? 'learned' : ''}`;
+                card.innerHTML = `
+                    <div class="card-letter">${letter}</div>
+                    <div class="card-word">${letter}</div>
+                    <button class="play-btn" onclick="playLetter('${letter}')">🔊 Dinle</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Sayıları yükle
+        function loadNumbers() {
+            const grid = document.getElementById('numbersGrid');
+            grid.innerHTML = '';
+            
+            const { start, end } = currentNumberRange;
+            
+            for (let i = start; i <= end; i++) {
+                const card = document.createElement('div');
+                card.className = `learning-card ${learnedNumbers.has(i) ? 'learned' : ''}`;
+                card.innerHTML = `
+                    <div class="card-number">${i}</div>
+                    <div class="card-word">${numberWords[i-1]}</div>
+                    <button class="play-btn" onclick="playNumber(${i})">🔊 Dinle</button>
+                `;
+                grid.appendChild(card);
+            }
+        }
+
+        // Sayı aralığını değiştir
+        function showNumberRange(start, end, button) {
+            // Tüm range butonlarını pasif yap
+            document.querySelectorAll('.range-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Seçilen butonu aktif yap
+            button.classList.add('active');
+            
+            currentNumberRange = { start, end };
+            loadNumbers();
+        }
+
+        // Harf sesini çal
+        function playLetter(letter) {
+            playSound(letter, () => {
+                learnedLetters.add(letter);
+                updateProgress();
+                saveProgress();
+                
+                // Kartı güncelle
+                const cards = document.querySelectorAll('.learning-card');
+                cards.forEach(card => {
+                    if (card.querySelector('.card-letter')?.textContent === letter) {
+                        card.classList.add('learned');
+                        showCelebration('🎉');
+                    }
+                });
+            });
+        }
+
+        // Sayı sesini çal
+        function playNumber(number) {
+            const word = numberWords[number - 1];
+            playSound(word, () => {
+                learnedNumbers.add(number);
+                updateProgress();
+                saveProgress();
+                
+                // Kartı güncelle
+                const cards = document.querySelectorAll('.learning-card');
+                cards.forEach(card => {
+                    if (card.querySelector('.card-number')?.textContent == number) {
+                        card.classList.add('learned');
+                        showCelebration('⭐');
+                    }
+                });
+            });
+        }
+
+        // İlerlemeyi güncelle
+        function updateProgress() {
+            const totalItems = letters.length + numbers.length;
+            const learnedItems = learnedLetters.size + learnedNumbers.size;
+            const progressPercentage = (learnedItems / totalItems) * 100;
+            
+            const progressFill = document.getElementById('overallProgress');
+            const progressText = document.getElementById('progressText');
+            
+            if (progressFill) {
+                progressFill.style.width = progressPercentage + '%';
+            }
+            
+            if (progressText) {
+                progressText.textContent = `${learnedItems}/${totalItems} öğrenildi (${Math.round(progressPercentage)}%)`;
+            }
+            
+            // Rozetleri güncelle
+            updateBadges();
+        }
+
+        // Rozetleri güncelle
+        function updateBadges() {
+            const letterBadge = document.getElementById('letterBadge');
+            const numberBadge = document.getElementById('numberBadge');
+            const quizBadge = document.getElementById('quizBadge');
+            const masterBadge = document.getElementById('masterBadge');
+            
+            // Harf rozeti
+            if (learnedLetters.size >= 26) {
+                letterBadge.style.opacity = '1';
+            }
+            
+            // Sayı rozeti
+            if (learnedNumbers.size >= 100) {
+                numberBadge.style.opacity = '1';
+            }
+            
+            // Quiz rozeti
+            if (totalQuizScore >= 100) {
+                quizBadge.style.opacity = '1';
+            }
+            
+            // Master rozeti
+            if (learnedLetters.size >= 26 && learnedNumbers.size >= 100 && totalQuizScore >= 100) {
+                masterBadge.style.opacity = '1';
+            }
+        }
+
+        // Kutlama animasyonu
+        function showCelebration(emoji) {
+            const celebration = document.createElement('div');
+            celebration.className = 'celebration';
+            celebration.textContent = emoji;
+            document.body.appendChild(celebration);
+            
+            setTimeout(() => {
+                document.body.removeChild(celebration);
+            }, 2000);
+        }
+
+        // Quiz başlat
+        function initQuiz() {
+            currentQuizQuestion = 0;
+            quizScore = 0;
+            quizQuestions = generateQuizQuestions();
+            
+            document.getElementById('quizContent').style.display = 'block';
+            document.getElementById('quizResults').style.display = 'none';
+            
+            showQuestion();
+        }
+
+        // Quiz soruları oluştur
+        function generateQuizQuestions() {
+            const questions = [];
+            
+            // Harf soruları
+            for (let i = 0; i < 5; i++) {
+                const correctLetter = letters[Math.floor(Math.random() * letters.length)];
+                const wrongOptions = [];
+                
+                while (wrongOptions.length < 3) {
+                    const randomLetter = letters[Math.floor(Math.random() * letters.length)];
+                    if (randomLetter !== correctLetter && !wrongOptions.includes(randomLetter)) {
+                        wrongOptions.push(randomLetter);
+                    }
+                }
+                
+                const options = [correctLetter, ...wrongOptions].sort(() => Math.random() - 0.5);
+                
+                questions.push({
+                    type: 'letter',
+                    question: `Hangi harf "${correctLetter}" harfidir?`,
+                    options: options,
+                    correct: correctLetter,
+                    audio: correctLetter
+                });
+            }
+            
+            // Sayı soruları
+            for (let i = 0; i < 5; i++) {
+                const correctNumber = Math.floor(Math.random() * 20) + 1;
+                const wrongOptions = [];
+                
+                while (wrongOptions.length < 3) {
+                    const randomNumber = Math.floor(Math.random() * 20) + 1;
+                    if (randomNumber !== correctNumber && !wrongOptions.includes(randomNumber)) {
+                        wrongOptions.push(randomNumber);
+                    }
+                }
+                
+                const options = [correctNumber, ...wrongOptions].sort(() => Math.random() - 0.5);
+                
+                questions.push({
+                    type: 'number',
+                    question: `Hangi sayı "${numberWords[correctNumber-1]}" kelimesini temsil eder?`,
+                    options: options,
+                    correct: correctNumber,
+                    audio: numberWords[correctNumber-1]
+                });
+            }
+            
+            return questions.sort(() => Math.random() - 0.5);
+        }
+
+        // Soruyu göster
+        function showQuestion() {
+            if (currentQuizQuestion >= quizQuestions.length) {
+                showQuizResults();
+                return;
+            }
+            
+            const question = quizQuestions[currentQuizQuestion];
+            document.getElementById('quizQuestion').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+            
+            // Ses çal
+            playSound(question.audio);
+            
+            question.options.forEach(option => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'quiz-option';
+                optionElement.textContent = option;
+                optionElement.onclick = () => selectAnswer(option, question.correct);
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            document.getElementById('nextBtn').style.display = 'none';
+        }
+
+        // Cevap seç
+        function selectAnswer(selected, correct) {
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                option.onclick = null; // Tıklamayı devre dışı bırak
+                
+                if (option.textContent == correct) {
+                    option.classList.add('correct');
+                } else if (option.textContent == selected && selected != correct) {
+                    option.classList.add('wrong');
+                }
+            });
+            
+            if (selected == correct) {
+                quizScore += 10;
+                showCelebration('🎉');
+                playSound('Correct!');
+            } else {
+                playSound('Try again!');
+            }
+            
+            document.getElementById('nextBtn').style.display = 'block';
+        }
+
+        // Sonraki soru
+        function nextQuestion() {
+            currentQuizQuestion++;
+            showQuestion();
+        }
+
+        // Quiz sonuçlarını göster
+        function showQuizResults() {
+            totalQuizScore += quizScore;
+            
+            document.getElementById('quizContent').style.display = 'none';
+            document.getElementById('quizResults').style.display = 'block';
+            
+            const scoreText = `${quizScore}/100 puan aldın! 🎊`;
+            document.getElementById('finalScore').textContent = scoreText;
+            
+            playSound(`Great job! You scored ${quizScore} points!`);
+            
+            updateProgress();
+            saveProgress();
+        }
+
+        // Quiz'i yeniden başlat
+        function restartQuiz() {
+            initQuiz();
+        }
+
+        // İstatistikleri güncelle
+        function updateStats() {
+            document.getElementById('learnedLettersCount').textContent = learnedLetters.size;
+            document.getElementById('learnedNumbersCount').textContent = learnedNumbers.size;
+            document.getElementById('totalQuizScore').textContent = totalQuizScore;
+            
+            const studyMinutes = Math.floor((Date.now() - studyStartTime) / 60000);
+            document.getElementById('studyTime').textContent = studyMinutes;
+            
+            // Başarıları göster
+            const achievementsList = document.getElementById('achievementsList');
+            const achievements = [];
+            
+            if (learnedLetters.size >= 26) achievements.push('🔤 Tüm harfleri öğrendim!');
+            if (learnedNumbers.size >= 100) achievements.push('🔢 1-100 arası sayıları öğrendim!');
+            if (totalQuizScore >= 100) achievements.push('🏆 Quiz ustası oldum!');
+            if (studyMinutes >= 30) achievements.push('⏰ 30 dakika çalıştım!');
+            
+            achievementsList.innerHTML = achievements.length > 0 
+                ? achievements.map(achievement => `<p>${achievement}</p>`).join('')
+                : '<p>Henüz başarı kazanmadın. Öğrenmeye devam et! 💪</p>';
+        }
+
+        // İlerlemeyi kaydet
+        function saveProgress() {
+            const progress = {
+                learnedLetters: Array.from(learnedLetters),
+                learnedNumbers: Array.from(learnedNumbers),
+                totalQuizScore: totalQuizScore,
+                studyStartTime: studyStartTime
+            };
+            
+            localStorage.setItem('englishLearningProgress', JSON.stringify(progress));
+        }
+
+        // İlerlemeyi yükle
+        function loadProgress() {
+            const saved = localStorage.getItem('englishLearningProgress');
+            if (saved) {
+                const progress = JSON.parse(saved);
+                learnedLetters = new Set(progress.learnedLetters || []);
+                learnedNumbers = new Set(progress.learnedNumbers || []);
+                totalQuizScore = progress.totalQuizScore || 0;
+                studyStartTime = progress.studyStartTime || Date.now();
+            }
+        }
+
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Sayfa yüklendi, uygulama başlatılıyor...');
+            
+            loadProgress();
+            loadLetters();
+            updateProgress();
+            
+            // Hoş geldin mesajı - API'nin kullanıcı etkileşimiyle aktifleşmesi için
+            setTimeout(() => {
+                playSound('Welcome to Premium English Learning!');
+            }, 1000);
+        });
+
+        // Sayfa kapatılırken ilerlemeyi kaydet
+        window.addEventListener('beforeunload', saveProgress);
+    </script>
+</body>
+</html>
