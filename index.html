@@ -63,7 +63,7 @@
         }
 
         .premium-badge {
-            display: inline-block;
+            display: inline-block !important; /* ÖNEMLİ DEĞİŞİKLİK */
             background: linear-gradient(45deg, #FFD700, #FFA500);
             color: white;
             padding: 5px 15px;
@@ -671,7 +671,7 @@
             'Ninety-one', 'Ninety-two', 'Ninety-three', 'Ninety-four', 'Ninety-five', 'Ninety-six', 'Ninety-seven', 'Ninety-eight', 'Ninety-nine', 'One hundred'
         ];
         
-        // Ses oynatma fonksiyonu (GÜNCELLENDİ)
+        // Ses oynatma fonksiyonu
         function playSound(audioName, callback) {
             console.log('Ses çalınıyor:', audioName);
             const audioPath = `https://archive.org/download/ingilizce-sesler-projesi/${audioName}.mp3`;
