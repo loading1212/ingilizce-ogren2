@@ -669,25 +669,43 @@
             'Seventy-one', 'Seventy-two', 'Seventy-three', 'Seventy-four', 'Seventy-five', 'Seventy-six', 'Seventy-seven', 'Seventy-eight', 'Seventy-nine', 'Eighty',
             'Eighty-one', 'Eighty-two', 'Eighty-three', 'Eighty-four', 'Eighty-five', 'Eighty-six', 'Eighty-seven', 'Eighty-eight', 'Eighty-nine', 'Ninety',
             'Ninety-one', 'Ninety-two', 'Ninety-three', 'Ninety-four', 'Ninety-five', 'Ninety-six', 'Ninety-seven', 'Ninety-eight', 'Ninety-nine', 'One hundred'
-        ];
+        ];        
         
-        // Ses oynatma fonksiyonu (GÜNCELLENDİ)
-        function playSound(audioName, callback) {
-            console.log('Ses çalınıyor:', audioName);
-            const audioPath = `https://archive.org/download/ingilizce-sesler-projesi/${audioName}.mp3`;
-            const audio = new Audio(audioPath);
-            
-            const indicator = document.getElementById('soundIndicator');
-            indicator.style.display = 'block';
+       // Ses oynatma fonksiyonu (SON DÜZELTME)
+function playSound(audioName, callback) {
+    console.log('Ses çalınıyor:', audioName);
+    
+    // YENİ YOL: Dosyalar ana repoda olduğu için 
+    // mutlak yolu (/repo-adı/dosya.mp3) veya 
+    // göreceli yolu (./dosya.mp3) kullanmalıyız. 
+    // GitHub Pages'ta en güvenilir yol budur:
+    const audioPath = `/ingilizce-ogren2/${audioName}.mp3`;
+    
+    const audio = new Audio(audioPath);
+    
+    const indicator = document.getElementById('soundIndicator');
+    indicator.style.display = 'block';
 
-            audio.addEventListener('canplaythrough', () => {
-                audio.play().then(() => {
-                    console.log('Ses çalma tamamlandı.');
-                }).catch(e => {
-                    console.error('Ses çalma hatası:', e);
-                });
-            });
+    audio.addEventListener('canplaythrough', () => {
+        audio.play().then(() => {
+            console.log('Ses çalma tamamlandı.');
+        }).catch(e => {
+            // Autoplay hatası
+            console.error('Ses çalma hatası:', e);
+        });
+    });
 
+    audio.addEventListener('ended', () => {
+        indicator.style.display = 'none';
+        if (callback) callback();
+    });
+
+    audio.addEventListener('error', (e) => {
+        console.error('Ses dosyası yükleme hatası (404/Diğer):', e);
+        indicator.style.display = 'none';
+        if (callback) callback();
+    });
+}
             audio.addEventListener('ended', () => {
                 indicator.style.display = 'none';
                 if (callback) callback();
@@ -1086,3 +1104,4 @@
     </script>
 </body>
 </html>
+
