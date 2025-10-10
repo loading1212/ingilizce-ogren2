@@ -674,8 +674,9 @@
         // Ses oynatma fonksiyonu (GÜNCELLENDİ)
         function playSound(audioName, callback) {
             console.log('Ses çalınıyor:', audioName);
-            const audioPath = `https://archive.org/download/ingilizce-sesler-projesi/${audioName}.mp3`;
+            const audioPath = `https://archive.org/download/z_20251010/${audioName}.mp3`;
             const audio = new Audio(audioPath);
+            audio.play();
             
             const indicator = document.getElementById('soundIndicator');
             indicator.style.display = 'block';
